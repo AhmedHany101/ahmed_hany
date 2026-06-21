@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ahmed Hany — Backend Engineer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy: #0d1b2a;
+      --navy-mid: #1a2d42;
+      --navy-light: #243b55;
+      --accent: #00d4aa;
+      --accent-dim: rgba(0,212,170,0.12);
+      --accent-dim2: rgba(0,212,170,0.06);
+      --text: #e8edf2;
+      --text-muted: #8a9bb0;
+      --text-dim: #5a6a7e;
+      --border: rgba(255,255,255,0.07);
+      --card-bg: rgba(255,255,255,0.04);
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--navy);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ─── GRID NOISE BG ─── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        radial-gradient(ellipse 80% 50% at 20% 10%, rgba(0,212,170,0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 80% 80%, rgba(0,150,255,0.05) 0%, transparent 60%);
+      pointer-events: none; z-index: 0;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5%;
+      height: 64px;
+      background: rgba(13,27,42,0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 15px; font-weight: 500;
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a {
+      font-size: 13px; font-weight: 400; color: var(--text-muted);
+      text-decoration: none; transition: color 0.2s;
+      letter-spacing: 0.02em;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    /* ─── SECTIONS ─── */
+    section { position: relative; z-index: 1; padding: 100px 5%; max-width: 1100px; margin: 0 auto; }
+    section:first-of-type { padding-top: 140px; }
+
+    /* ─── HERO ─── */
+    .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
+
+    .hero-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px; color: var(--accent);
+      letter-spacing: 0.1em; margin-bottom: 20px;
+    }
+
+    .hero-name {
+      font-size: clamp(52px, 8vw, 96px);
+      font-weight: 600;
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    .hero-title {
+      font-size: clamp(20px, 3vw, 28px);
+      font-weight: 300;
+      color: var(--text-muted);
+      margin-bottom: 28px;
+    }
+
+    .hero-title span { color: var(--accent); font-weight: 400; }
+
+    .hero-desc {
+      max-width: 560px;
+      font-size: 16px;
+      color: var(--text-muted);
+      line-height: 1.8;
+      margin-bottom: 48px;
+    }
+
+    .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 28px; border-radius: var(--radius-sm);
+      background: var(--accent); color: var(--navy);
+      font-size: 14px; font-weight: 600; text-decoration: none;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+    .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 13px 28px; border-radius: var(--radius-sm);
+      border: 1px solid var(--border); color: var(--text-muted);
+      font-size: 14px; font-weight: 400; text-decoration: none;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ─── SECTION LABELS ─── */
+    .section-label {
+      display: flex; align-items: center; gap: 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px; color: var(--accent);
+      letter-spacing: 0.12em; text-transform: uppercase;
+      margin-bottom: 48px;
+    }
+    .section-label::after {
+      content: ''; flex: 1; height: 1px;
+      background: linear-gradient(to right, var(--border), transparent);
+    }
+
+    /* ─── ABOUT ─── */
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
+
+    .about-text p { font-size: 15px; color: var(--text-muted); line-height: 1.9; margin-bottom: 16px; }
+    .about-text p:last-child { margin-bottom: 0; }
+
+    .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 22px;
+    }
+    .stat-num {
+      font-size: 32px; font-weight: 600; color: var(--accent);
+      font-family: 'JetBrains Mono', monospace; line-height: 1;
+      margin-bottom: 6px;
+    }
+    .stat-label { font-size: 12px; color: var(--text-dim); letter-spacing: 0.04em; }
+
+    /* ─── SKILLS ─── */
+    .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+
+    .skill-group {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+    }
+
+    .skill-group-title {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.1em;
+      color: var(--accent); text-transform: uppercase; margin-bottom: 20px;
+    }
+
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+
+    .tag {
+      display: inline-block;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 12px; font-weight: 500;
+      background: var(--accent-dim);
+      color: var(--accent);
+      border: 1px solid rgba(0,212,170,0.2);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* ─── EXPERIENCE ─── */
+    .timeline { display: flex; flex-direction: column; gap: 0; }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 180px 1px 1fr;
+      gap: 0 32px;
+      padding-bottom: 48px;
+    }
+    .timeline-item:last-child { padding-bottom: 0; }
+
+    .timeline-date {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px; color: var(--text-dim);
+      padding-top: 4px; text-align: right;
+      line-height: 1.5;
+    }
+    .timeline-date strong { color: var(--accent); font-weight: 500; display: block; margin-bottom: 2px; }
+
+    .timeline-line {
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .timeline-dot {
+      width: 9px; height: 9px; border-radius: 50%;
+      background: var(--accent); flex-shrink: 0;
+      margin-top: 6px; position: relative; z-index: 1;
+    }
+    .timeline-connector {
+      flex: 1; width: 1px; background: var(--border); margin-top: 4px;
+    }
+    .timeline-item:last-child .timeline-connector { display: none; }
+
+    .timeline-body {
+      padding-bottom: 8px;
+    }
+    .timeline-role { font-size: 17px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+    .timeline-company { font-size: 13px; color: var(--accent); font-weight: 500; margin-bottom: 16px; }
+
+    .timeline-bullets { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .timeline-bullets li {
+      font-size: 14px; color: var(--text-muted);
+      padding-left: 16px; position: relative; line-height: 1.7;
+    }
+    .timeline-bullets li::before {
+      content: '→'; position: absolute; left: 0;
+      color: var(--accent); font-size: 12px; top: 2px;
+    }
+
+    /* ─── PROJECTS ─── */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px;
+    }
+
+    .project-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: border-color 0.25s, transform 0.25s;
+      cursor: pointer;
+    }
+    .project-card:hover { border-color: rgba(0,212,170,0.35); transform: translateY(-4px); }
+
+    .project-logo-wrap {
+      height: 180px;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--navy-light);
+      border-bottom: 1px solid var(--border);
+      font-size: 56px; position: relative; overflow: hidden;
+    }
+
+    .project-logo-wrap::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(circle at 50% 100%, rgba(0,212,170,0.1), transparent 70%);
+    }
+
+    .project-logo-img {
+      width: 80px; height: 80px; object-fit: contain;
+      border-radius: 16px;
+      position: relative; z-index: 1;
+    }
+
+    .project-logo-placeholder {
+      width: 80px; height: 80px;
+      border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 32px; font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+      position: relative; z-index: 1;
+    }
+
+    .project-body { padding: 24px; }
+
+    .project-name { font-size: 17px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+    .project-desc { font-size: 13px; color: var(--text-muted); line-height: 1.7; margin-bottom: 18px; }
+
+    .project-tech { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
+    .project-tech span {
+      font-size: 11px; font-weight: 500;
+      padding: 3px 10px; border-radius: 4px;
+      background: var(--navy-mid); color: var(--text-dim);
+      font-family: 'JetBrains Mono', monospace;
+      border: 1px solid var(--border);
+    }
+
+    .project-links { display: flex; gap: 12px; }
+    .project-link {
+      font-size: 12px; color: var(--accent); text-decoration: none;
+      display: flex; align-items: center; gap: 5px;
+      transition: opacity 0.2s;
+    }
+    .project-link:hover { opacity: 0.7; }
+
+    /* ─── CONTACT ─── */
+    .contact-inner {
+      max-width: 640px;
+      text-align: center; margin: 0 auto;
+    }
+    .contact-heading {
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 600; line-height: 1.1;
+      letter-spacing: -0.02em; margin-bottom: 20px;
+    }
+    .contact-heading span { color: var(--accent); }
+    .contact-sub { font-size: 15px; color: var(--text-muted); margin-bottom: 40px; line-height: 1.7; }
+    .contact-links { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      position: relative; z-index: 1;
+      text-align: center;
+      padding: 32px 5%;
+      border-top: 1px solid var(--border);
+      font-size: 13px; color: var(--text-dim);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      .about-grid { grid-template-columns: 1fr; gap: 40px; }
+      .timeline-item { grid-template-columns: 1fr; gap: 8px; }
+      .timeline-date { text-align: left; }
+      .timeline-line { display: none; }
+      nav { padding: 0 5%; }
+      .nav-links { gap: 20px; }
+      .hero-name { font-size: 48px; }
+    }
+
+    @media (max-width: 480px) {
+      .nav-links { display: none; }
+      .stat-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ─── SCROLL FADE ─── */
+    .fade-up {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-up.visible { opacity: 1; transform: none; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="nav-logo">ahmed.hany</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <p class="hero-eyebrow">// available for new opportunities</p>
+  <h1 class="hero-name">Ahmed<br/>Hany</h1>
+  <p class="hero-title">Backend Software Engineer &amp; <span>Laravel Specialist</span></p>
+  <p class="hero-desc">
+    Building scalable web applications, RESTful APIs, and enterprise SaaS platforms.
+    3+ years delivering production-ready systems with clean, maintainable code.
+  </p>
+  <div class="hero-actions">
+    <a href="#projects" class="btn-primary">View Projects ↓</a>
+    <a href="#contact" class="btn-ghost">Get in touch</a>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-label">01 — About me</div>
+  <div class="about-grid fade-up">
+    <div class="about-text">
+      <p>
+        I'm a Backend Software Engineer passionate about building scalable web applications,
+        API-driven systems, and enterprise SaaS platforms. I specialize in Laravel backend
+        development, system architecture, and database design.
+      </p>
+      <p>
+        With professional experience across multiple software companies, I've worked on
+        large-scale business systems, multi-tenant platforms, mobile application backends,
+        and advanced dashboard solutions.
+      </p>
+      <p>
+        My expertise includes RESTful APIs, authentication systems, real-time features,
+        performance optimization, and complex business logic implementation.
+      </p>
+    </div>
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-num">4+</div>
+        <div class="stat-label">Years of experience</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">30+</div>
+        <div class="stat-label">Projects delivered</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">7</div>
+        <div class="stat-label">Companies worked</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">∞</div>
+        <div class="stat-label">APIs built</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-label">02 — Technical skills</div>
+  <div class="skills-grid fade-up">
+    <div class="skill-group">
+      <div class="skill-group-title">Backend</div>
+      <div class="skill-tags">
+        <span class="tag">PHP</span>
+        <span class="tag">Laravel</span>
+        <span class="tag">RESTful APIs</span>
+        <span class="tag">Queues & Jobs</span>
+        <span class="tag">Multi-tenant SaaS</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Database</div>
+      <div class="skill-tags">
+        <span class="tag">MySQL</span>
+        <span class="tag">Query Optimization</span>
+        <span class="tag">Database Design</span>
+        <span class="tag">Migrations</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Real-time &amp; Integrations</div>
+      <div class="skill-tags">
+        <span class="tag">Firebase FCM</span>
+        <span class="tag">WebSockets</span>
+        <span class="tag">Pusher</span>
+        <span class="tag">Payment Gateway</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">DevOps &amp; Infra</div>
+      <div class="skill-tags">
+        <span class="tag">VPS / Linux</span>
+        <span class="tag">Nginx</span>
+        <span class="tag">Apache</span>
+        <span class="tag">Git / GitHub</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">AI &amp; Modern Tools</div>
+      <div class="skill-tags">
+        <span class="tag">MCP</span>
+        <span class="tag">AI Integration</span>
+        <span class="tag">AI Tools</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Frontend (supporting)</div>
+      <div class="skill-tags">
+        <span class="tag">Laravel Blade</span>
+        <span class="tag">HTML / CSS</span>
+        <span class="tag">JavaScript</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-label">03 — Experience</div>
+  <div class="timeline fade-up">
+
+    <div class="timeline-item">
+      <div class="timeline-date">
+        <strong>Current</strong>
+        Mar 2025 — Present
+      </div>
+      <div class="timeline-line">
+        <div class="timeline-dot"></div>
+        <div class="timeline-connector"></div>
+      </div>
+      <div class="timeline-body">
+        <div class="timeline-role">Backend Software Engineer</div>
+        <div class="timeline-company">BeSoft Company</div>
+        <ul class="timeline-bullets">
+          <li>Led development of major enterprise-level projects, delivering stable and scalable backend solutions.</li>
+          <li>Designed and built RESTful APIs with advanced business logic and system architecture design.</li>
+          <li>Collaborated with cross-functional teams to integrate frontend, mobile, and backend services.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-date">
+        <strong>2024 — 2025</strong>
+        Nov 2024 — Oct 2025
+      </div>
+      <div class="timeline-line">
+        <div class="timeline-dot"></div>
+        <div class="timeline-connector"></div>
+      </div>
+      <div class="timeline-body">
+        <div class="timeline-role">Backend Software Engineer</div>
+        <div class="timeline-company">Resoft Company</div>
+        <ul class="timeline-bullets">
+          <li>Architected multi-tenant SaaS platforms with focus on performance, scalability, and clean API design.</li>
+          <li>Built and optimized backend modules, improved database schemas, and implemented complex business logic.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-date">
+        <strong>2022 — 2024</strong>
+        Oct 2022 — Aug 2024
+      </div>
+      <div class="timeline-line">
+        <div class="timeline-dot"></div>
+        <div class="timeline-connector"></div>
+      </div>
+      <div class="timeline-body">
+        <div class="timeline-role">Full Stack Developer</div>
+        <div class="timeline-company">ICANForSoftware ISS Company</div>
+        <ul class="timeline-bullets">
+          <li>Delivered multiple web systems and mobile application backends using Laravel.</li>
+          <li>Built authentication systems, dashboards, external service integrations, and mobile app APIs.</li>
+          <li>Contributed to UI implementation bridging backend and frontend deliverables.</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-label">04 — Projects</div>
+  <div class="projects-grid fade-up" id="projects-grid">
+
+    <!-- Template project cards — replace logo src and details with your real projects -->
+
+    <div class="project-card">
+      <div class="project-logo-wrap">
+        <img src="logo.201df0506d4e6d942600.png" class="project-logo-img" alt="Project logo" />
+        <!-- <div class="project-logo-placeholder" style="background:rgba(0,212,170,0.15); color:var(--accent);">S1</div> -->
+      </div>
+      <div class="project-body">
+        <div class="project-name">Restocash(Saas)</div>
+        <div class="project-desc">
+          A cloud-based Point of Sale (POS) system designed for restaurants, cafés, and
+          food-service businesses.
+          The platform is built using a multi-tenant SaaS architecture, enabling multiple
+          restaurant
+        </div>
+        <div class="project-tech">
+          <span>Laravel</span><span>MySQL</span><span>Multi-tenancy</span><span>REST API</span>
+        </div><div class="project-links">
+          <a href="https://restocash.app/" class="project-link">↗ Live Demo</a>
+          <a href="https://github.com/AhmedHany101" class="project-link"  >⌥ GitHub</a>
+        </div>
+        </div>
+        </div>
+        
+        <div class="project-card">
+          <div class="project-logo-wrap">
+                    <img src="crm.jfif" class="project-logo-img" alt="Project logo" />
+
+            <!-- <div class="project-logo-placeholder" style="background:rgba(0,150,255,0.12); color:#4db8ff;">S2</div> -->
+          </div>
+          <div class="project-body">
+            <div class="project-name">Besoft Crm(Saas)</div>
+            <div class="project-desc">
+              A cloud-based CRM system designed specifically for the real estate marketing
+              sector.
+              The platform is built using a multi-tenant SaaS architecture, allowing multiple
+              companies (tenants) to use the system independently with isolated databases and
+              customized configurations.
+        </div>
+        <div class="project-tech">
+          <span>Laravel</span><span>MySQL</span><span>Multi-tenancy</span><span>REST API</span>
+        </div>
+        <div class="project-links">
+          <a href="https://besoftcrm.com/HomePage" class="project-link">↗ Live Demo</a>
+          <a href="https://github.com/AhmedHany101" class="project-link"  >⌥ GitHub</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-logo-wrap">
+          <img src="dida.png" class="project-logo-img" alt="Project logo" />
+
+        <!-- <div class="project-logo-placeholder" style="background:rgba(180,100,255,0.12); color:#c084fc;">https://didamax.net/</div> -->
+      </div>
+      <div class="project-body">
+        <div class="project-name">Dida Max</div>
+        <div class="project-desc">
+           Multi-category eCommerce platform built with a scalable RESTful API backend
+    for mobile applications, featuring JWT authentication, payment gateway
+    integration, order management, product categories, and performance-optimized
+    MySQL database queries.
+        </div>
+        <div class="project-tech">
+          <span>Laravel</span><span>REST API</span><span>JWT</span><span>Payment Gateway</span><span>MySQL</span>
+        </div>
+        <div class="project-links">
+          <a href="https://didamax.net/" class="project-link">↗ Live Demo</a>
+          <a href="https://github.com/AhmedHany101" class="project-link"  >⌥ GitHub</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-logo-wrap">
+          <img src="viking_icon.png" class="project-logo-img" alt="Project logo" />
+      </div>
+      <div class="project-body">
+        <div class="project-name">Viking Eg</div>
+        <div class="project-desc">
+             Car import and export company website showcasing available vehicles,
+      company services, and client inquiries, built with a clean Laravel backend,
+      dynamic content management, and responsive Blade interface.
+        </div>
+        <div class="project-tech">
+          <span>Laravel</span><span>Blade</span><span>MySQL</span><span>Charts</span>
+        </div>
+        <div class="project-links">
+          <a href="https://www.viking-eg.com/" class="project-link">↗ Live Demo</a>
+          <a href="https://github.com/AhmedHany101" class="project-link"  >⌥ GitHub</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <p style="margin-top: 32px; font-size: 13px; color: var(--text-dim); text-align:center;">
+    ✦ Replace the placeholder cards above with your real projects — add logo images to <code style="color:var(--accent)">assets/</code> folder
+  </p>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-inner fade-up">
+    <div class="section-label" style="justify-content:center;">05 — Contact</div>
+    <h2 class="contact-heading">Let's build something<br/><span>great together</span></h2>
+    <p class="contact-sub">
+      Open to backend engineering roles, freelance projects, and interesting collaborations.
+      Don't hesitate to reach out.
+    </p>
+    <div class="contact-links">
+      <a href="mailto:hany487d@gmail.com" class="btn-primary">✉ hany487d@gmail.com</a>
+      <a href="tel:+201275886491" class="btn-ghost">📞 +201275886491</a>
+      <a href="https://www.linkedin.com/in/ahmed-hany-019813382/" target="_blank" class="btn-ghost">LinkedIn ↗</a>
+      <a href="https://github.com/AhmedHany101" target="_blank" class="btn-ghost">GitHub ↗</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span>© 2025 Ahmed Hany — built with ♥ and lots of Laravel</span>
+</footer>
+
+<script>
+  // Scroll fade-in
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // Active nav link
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 100) current = s.getAttribute('id');
+    });
+    navLinks.forEach(a => {
+      a.style.color = a.getAttribute('href') === `#${current}` ? 'var(--text)' : '';
+    });
+  });
+</script>
+
+</body>
+</html>
